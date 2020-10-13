@@ -1,1 +1,3 @@
-Tajamar-jQuery
+# Tajamar-jQuery
+
+### Ejemplos y prácticas jQuery
