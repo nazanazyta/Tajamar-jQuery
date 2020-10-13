@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>JQuery 4</title>
+</head>
+<body>
+    <h1>Ejemplo each()</h1>
+    <p>BLA BLA BLA BLA</p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("p").click(function () {
+                var colores = ["green", "blue", "yellow", "red", "grey", "orange"];
+                $("p").each(function () {
+                    var aleat = parseInt(Math.random() * colores.length);
+                    //CADA PÁRRAFO TENGO UN COLOR DIFERENTE
+                    var color = colores[aleat];
+                    $(this).css("background-color", color);
+                    $(this).text(color);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

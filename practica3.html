@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Práctica 3</title>
+</head>
+<body>
+    <h1>Creación de objetos checkbox y suma</h1>
+    <form>
+        <label>Selecciona número de casillas: </label>
+        <input type="range" id="rango" min="1" max="10" />
+        <span id="valor"></span>
+    </form>
+    <div id="caja"></div>
+    <hr />
+    <h1 id="resu"></h1>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#rango").change(function () {
+                var suma = 0;
+                $("#caja").text("");
+                $("#valor").text($(this).val());
+                var valor = parseInt($("#rango").val());
+                for (var i = 0; i < valor; i++) {
+                    var check = $("<input>", {
+                        "type": "checkbox"
+                        , "value": parseInt((Math.random() * 20) + 1)
+                    });
+                    var num = $("<label>");
+                    num.val(check.val());
+                    $("#caja").append(check);
+                    $("#caja").append(num.val());
+                    $(check).click(function () {
+                        if ($(this).is(":checked")) {
+                            suma += parseInt($(this).val());
+                        } else {
+                            suma -= parseInt($(this).val());
+                        }
+                        $("#resu").text(suma);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

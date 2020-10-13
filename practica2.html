@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Práctica 2</title>
+    <style>
+        input:focus{
+            background-color: #ff00ff !important;
+        }
+        .celeste {
+            background-color: #00ffff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sumar cajas con valores aleatorios</h1>
+    <input type="text" value="12" /><br />
+    <input type="text" value="3" /><br />
+    <input type="text" value="4" /><br />
+    <input type="text" value="8" /><br />
+    <input type="text" value="99" /><br /><br />
+    <button id="generar">Generar números</button>
+    <button id="sumar">Sumar números</button>
+    <h1 id="resultado"></h1>
+
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            //var colores = ["green", "blue", "yellow", "red", "grey", "orange"];
+            $("input[type=text]").blur(function () {
+                //var aleat = parseInt(Math.random() * colores.length);
+                //var color = colores[aleat];
+                $(this).val(parseInt((Math.random() * 99) - 1));
+                //$(this).css("background-color", color);
+                $(this).addClass("celeste");
+            });
+            $("#generar").click(function () {
+                $("input[type=text]").each(function () {
+                    //$(this).attr("value", parseInt((Math.random() * 99) + 1))
+                    $(this).val(parseInt((Math.random() * 99) + 1));
+                });
+            });
+            $("#sumar").click(function () {
+                var suma = 0;
+                $("input[type=text]").each(function () {
+                    suma += parseInt($(this).val());
+                });
+                $("#resultado").text(suma);
+            });
+        });
+    </script>
+</body>
+</html>

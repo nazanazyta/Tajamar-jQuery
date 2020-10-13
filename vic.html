@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body align="center">
+    <h1> Creacion de objetos CHECKBOX </h1>
+    <form>
+        <label> Selecciona cantidad de checkbox </label>
+        <input type="range" min="1" max="10" name="rango" id="rango">
+        <span id="valorRango"> </span>
+        <br /><br />
+        <div id="padre">
+        </div>
+    </form>
+    <h1 id="res"></h1>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#rango").change(function () {
+                var suma = 0;
+                $("#padre").text("");
+                $("#valorRango").text($(this).val());
+                for (var i = 0; i < $(this).val(); i++) {
+                    var input = $("<input>");
+                    input.attr("type", "checkbox");
+                    var num = parseInt(Math.random() * 100);
+                    input.attr("value", num);
+                    var span = $("<span>");
+                    span.text(num);
+                    $("#padre").append(input);
+                    $("#padre").append(span);
+                    $(input).click(function () {
+                        if ($(this).is(":checked")) {
+                            suma += parseInt($(this).val());
+                            console.log(suma);
+                        } else {
+                            suma -= parseInt($(this).val());
+                            console.log(suma);
+                        }
+                        $("#res").text(suma);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

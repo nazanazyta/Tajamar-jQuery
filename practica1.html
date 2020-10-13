@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Practica 1</title>
+    <style>
+        img {
+            width: 200px;
+            height: 120px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generar imágenes objetos</h1>
+    <form name="formulario">
+        <input type="range" id="rango" value="" min="1" max="20" />
+        <span id="valor"></span>
+    </form>
+    <hr />
+    <div id="imagenes"></div>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#rango").change(function () {
+                //$("#imagenes").text("");
+                //$("#imagenes").html("");
+                $("#imagenes").empty();
+                var valor = parseInt($(this).val());
+                $("#valor").text(valor);
+                for (var i = 0; i < valor; i++) {
+                    var img = $("<img>");
+                    //var img = $("<img>", {
+                    //    "src": "img/galgo1.jpg"
+                    //});
+                    img.attr("src", "img/galgo1.jpg");
+                    img.mouseover(function () {
+                        $(this).attr("src","img/galgo2.jpg");
+                    });
+                    img.mouseout(function () {
+                        //$(this).remove();
+                        $(this).attr("src", "img/galgo1.jpg");
+                    });
+                    $("#imagenes").append(img);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

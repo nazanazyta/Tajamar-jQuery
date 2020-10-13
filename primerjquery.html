@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>jQuery 1</title>
+    <style>
+        .rojo{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="rojo">Título 1</h1>
+    <h2 class="rojo">Título 2</h2>
+    <h1 class="rojo">Título 3</h1>
+    <h2 id="titulo4">Título 4</h2>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        //INSTRUCCIÓN PARA CUANDO HA CARGADO LA PÁGINA
+        $(document).ready(function () {
+            //ESTO ES UN CÓDIGO JS Y JQUERY. PODEMOS
+            //UTILIZAR CUALQUIER INSTRUCCIÓN DE JS
+            //alert("Jquery cargado");
+            //TODO FUNCIONA CON SELECTORES
+            //EXISTEN SELECTORES DE ETIQUERA Y FUNCIONAN
+            //COMO CONJUNTO --> ACTÚAN SOBRE TODOS LOS OBJETOS
+            //p, h1, div
+            //$("h1").hide();
+            //PODEMOS ASIGNAR EVENTOS (LISTENER) A UN
+            //CONJUNTO MEDIANTE SUS SELECTORES
+            //AL PULSAR SOBRE CUALQUIER <h2> LO OCULTAMOS
+            $("h2").click(function () {
+                //$("h2").hide(); //OCULTA TODOS LOS ELEMENTOS
+                //LA PALABRA CLAVE this ACCEDE AL OBJETO
+                //QUE HA REALIZADO LA PETICIÓN AL MÉTODO
+                //this DEBE ESCRIBIRSE COMO JQUERY, SI NO
+                //CAPTURAMOS OTRO OBJETO DISTINTO DE JAVASCRIPT
+                //var js = this;    //AQUÍ NO TENEMOS EL <h2>, ES  JS
+                //var jquery = $(this);   //ESTO ES JQUERYM SÍ TENEMOS EL <h2>
+                $(this).hide();
+            });
+            //SELECTOR DE CLASE
+            $(".rojo").mouseover(function () {
+                $(this).fadeOut(3000);
+            });
+            //SELECTOR DE ID
+            $("#titulo4").click(function () {
+                alert("Pulsado");
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>JQuery 3</title>
+</head>
+<body>
+    <h1>Generar controles dinámicamente</h1>
+    <form>
+        <label>Contenido: </label>
+        <input type="text" id="cajacontenido" />
+        <button type="button" id="botoncreacion">Crear título</button>
+        <div id="padre"></div>
+    </form>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#botoncreacion").click(function () {
+                var texto = $("#cajacontenido").val();
+                //CREAMOS EL OBJETO CON VARIAS SINTAXIS
+                //var h1 = $("<h1>");
+                //h1.text(texto);
+                //h1.css("background-color", "green");
+                //h1.css("color", "white");
+                //AÑADIMOS EL OBJETO AL PARENT
+                //$("#padre").append(h1);
+                //PODEMOS CREAR EL OBJETO CON SUS PROPIEDADES
+                //EN UNA SOLA LÍNEA. FORMATO JSON
+                //var objeto = $("<tag>", {
+                //    "text": "Soy un texto", "style": "color:blue", ...
+                //});
+                var h1 = $("<h1>", {
+                    "text": texto,
+                    "style": "background-color:blue; color: white"
+                });
+                //PODEMOS AGREGAR DEL HIJO AL PADRE
+                h1.appendTo($("#padre"));
+                //SI DESEAMOS QUE LOS ELEMENTOS TENGAN EVENTOS
+                //TENDREMOS QUE REALIZAR MÉTODOS DELEGADOS (EVENT HANDLER)
+                //PARA EL OBJETO CREADO.
+                //DOS SINTAXIS: ALGO ANTIGUA QUE PODEMOS VERLA EN
+                //ALGUNOS CÓDIGOS Y SE UTILIZA on. LISTENER
+                //h1.on("click", function () {
+                //    //CON this ACCEDEMOS AL OBJETO)
+                //    $(this).text("Texto cambiado");
+                //});
+                //2: SINTAXIS PROPIA DE JQUERY
+                h1.click(function () {
+                    $(this).text("Cambiando...");
+                });
+            });
+            //LOS EVENTOS SE ACTIVAN SOBRE LOS OBJETOS CREADOS
+            //DINÁMICAMENTE??
+            //SOLAMENTE ENTRARN EN EL JUEGO DE EVENTOS LOS OBJETOS
+            //DIBUJADOS EN LA CARGA DE LA PÁGINA
+            $("h1").click(function () {
+                alert("Martes 13");
+            })
+        });
+    </script>
+</body>
+</html>
