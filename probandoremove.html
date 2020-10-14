@@ -10,6 +10,10 @@
         <label>Selecciona número de casillas: </label>
         <input type="range" id="rango" min="1" max="10" />
         <span id="valor"></span>
+        <br />
+        <label>Seleccione posición: </label>
+        <input type="text" id="cajaposicion" value="0"/>
+        <button type="button" id="botoneliminar">Eliminar checkbox POICIÓN</button>
     </form>
     <div id="caja"></div>
     <hr />
@@ -17,6 +21,16 @@
     <script src="js/jquery-3.5.1.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            $("#botoneliminar").click(function () {
+                var posicion = parseInt($("#cajaposicion").val()) - 1;
+                console.log(posicion);
+                //ACCEDER A UN PARENT (capa) Y A TODOS LOS
+                //HIJOS (children) QUE TENGAMOS EN SU INTERIOR
+                //PARA RECUPERAR OBJETOS A PARTIR DE UNA POSICIÓN
+                //EN EL DIBUTO TENEMOS UN MÉTODO LLAMADO eq()
+                //Y QUE COMIENZA EN 0
+                $("#caja").children().eq(posicion).remove();
+            });
             $("#rango").change(function () {
                 var suma = 0;
                 //$("#caja").text("");
