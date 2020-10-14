@@ -4,12 +4,12 @@
     <meta charset="utf-8" />
     <title>Práctica 2</title>
     <style>
-        input:focus{
-            background-color: #ff00ff !important;
+        input:focus {
+            background-color: #00ffff !important;
         }
-        .celeste {
+        /*.celeste {
             background-color: #00ffff;
-        }
+        }*/
     </style>
 </head>
 <body>
@@ -26,13 +26,13 @@
     <script src="js/jquery-3.5.1.min.js"></script>
     <script>
         $(document).ready(function () {
-            //var colores = ["green", "blue", "yellow", "red", "grey", "orange"];
+            var colores = ["green", "blue", "yellow", "red", "grey", "orange"];
             $("input[type=text]").blur(function () {
-                //var aleat = parseInt(Math.random() * colores.length);
-                //var color = colores[aleat];
+                var aleat = parseInt(Math.random() * colores.length);
+                var color = colores[aleat];
                 $(this).val(parseInt((Math.random() * 99) - 1));
-                //$(this).css("background-color", color);
-                $(this).addClass("celeste");
+                $(this).css("background-color", color);
+                //$(this).addClass("celeste");
             });
             $("#generar").click(function () {
                 $("input[type=text]").each(function () {
