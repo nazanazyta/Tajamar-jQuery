@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>jQuery 10</title>
+</head>
+<body>
+    <h1>Documento XML simple JQuery</h1>
+    <button type="button" id="botonleer">Cargar empleados</button>
+    <div id="resultado"></div>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#botonleer").click(function () {
+                $.get("xml/empleados.xml", function (data) {
+                    console.log("leyendo...");
+                    //BUSCAMOS TODAS LAS ETIQUETAS APELLIDO
+                    var apellidos = $(data).find("APELLIDO");
+                    //var html = "<ul>";
+                    //apellidos.each(function () {
+                    //    //$(this) TENEMOS EL OBJETO NODO
+                    //    var ape = $(this).text(); //.textContent
+                    //    html += "<li>" + ape + "</li>";
+                    //});
+                    //html += "</ul>";
+                    //$("#resultado").html(html);
+                    var ul = $("<ul>");
+                    for (var ape of apellidos) {
+                        var li = $("<li>");
+                        li.text(ape.textContent);
+                        ul.append(li);
+                    }
+                    var caja = $("#resultado");
+                    caja.append(ul);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
