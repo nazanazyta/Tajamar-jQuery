@@ -34,7 +34,7 @@
             html += "<p><u>Dirección:</u> <span>" + direccion + "</span></p>";
             html += "<p><u>Email:</u> <span>" + email + "</span></p>";
             html += "<p><u>Código postal:</u> <span>" + codigo + "</span></p>";
-            html += "<p><u>Página web:</u> <a href='" + web + "'>" + web + "</span></p>";
+            html += "<p><u>Página web:</u> <a href='" + web + "'>" + web + "</a></p>";
             html += "<img src='" + imagen + "' class='img-thumbnail'/>";
             $("#resultado").html(html);
         });

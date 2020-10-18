@@ -2,9 +2,26 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>jQuery 14</title>
 </head>
 <body>
-
+    <h1>Leer documento tareas.json simple</h1>
+    <button type="button" onclick="realizarPeticion()">Leer tareas.json</button>
+    <div id="contenido"></div>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        function realizarPeticion() {
+            $.getJSON("json/tareas.json", function (data) {
+                var ul = $("<ul>");
+                $.each(data, function (key, value) {
+                    var li = $("<li>");
+                    li.html("<b>" + key + ":</b> <i>" + value + "</i>");
+                    console.log(li.text());
+                    ul.append(li);
+                });
+                $("#contenido").append(ul);
+            });
+        }
+    </script>
 </body>
 </html>
