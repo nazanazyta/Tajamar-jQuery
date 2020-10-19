@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>jQuery 15</title>
+</head>
+<body>
+    <h1>Conjunto objetos Json jQuery</h1>
+    <button type="button" id="botonclientes">Leer clientes JSON</button>
+    <div id="resultado"></div>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#botonclientes").click(function () {
+                $.getJSON("json/clientessimples.json", function (data) {
+                    //EL RECORRIDO ES CON $.each() PERO SI
+                    //RECORRENOS ARRAYS [] LO QUE VIENE ES EL
+                    //ÍNDICE DEL OBJETO Y EL PROPIO OBJETO
+                    $.each(data.clientes, function (index, cliente) {
+                        //LAS PROPIEDADES (KEY) DE LOS OBJETOS JSON
+                        //SON DINÁMICAS
+                        var h3 = $("<h3>", {
+                            text: "Indice: " + index + ", Nombre: " + cliente.nombre
+                        });
+                        h3.appendTo($("#resultado"));
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
