@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>jQuery 12</title>
+</head>
+<body>
+    <h1>Filtrar contenidos XML jQuery</h1>
+    <form>
+        <label>Apellido: </label>
+        <input type="text" id="cajaapellido" />
+        <button type="button" id="botonapellido">Buscar apellidos</button>
+        <label>Código Hospital</label>
+        <input type="text" id="cajahospital" />
+        <button type="button" id="botonhospital">Buscar hospital</button>
+        <div id="resultado"></div>
+    </form>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#botonapellido").click(function () {
+                $.get("xml/empleados.xml", function (data) {
+                    var ape = $("#cajaapellido").val().toUpperCase();
+                    //  APELLIDO:contains(GUTIERREZ)
+                    var filtro = "APELLIDO:contains(" + ape + ")";
+                    var empleados = $(data).find(filtro);
+                    if (empleados.length == 0) {
+                        $("#resultado").html("<h1 style='color: red'>"
+                            + "Sin resultados</h1>");
+                    } else {
+                        var html = "";
+                        //AL VENIR MÚLTIPLES ELEMENTOS, LOS RECORREMOS
+                        //CON UN .each()
+                        empleados.each(function () {
+                            var apellido = $(this).text();
+                            html += "<h2 style='color: blue'>" + apellido + "</h2>";
+                        });
+                        $("#resultado").html(html);
+                    }
+                });
+            });
+            $("#botonhospital").click(function () {
+                $.get("xml/HOSPITAL_ATRIBUTOS.xml", function (data) {
+                    var codigo = $("#cajahospital").val();
+                    //HOSPITAL[HOSPITAL_COD=14]
+                    var filtro = "HOSPITAL[HOSPITAL_COD=" + codigo + "]";
+                    //LOS FILTROS SE APLICAN SOBRE EL MÉTODO .find()
+                    var hospitales = $(data).find(filtro);
+                    if (hospitales.length == 0) {
+                        $("#resultado").html("<h1 style='color: red'>"
+                            + "No existen resultados: " + codigo + "</h1 > ");
+                    } else {
+                        //SABEMOS QUE DEVUELVE SOLO UN HOSPITAL,
+                        //ASÍ QUE LO RECUPERAMOS
+                        var hospital = hospitales.first();
+                        $("#resultado").html("<h1 style='color: blue'>"
+                            + "Nombre: " + hospital.attr("NOMBRE")
+                            + "<br />Dirección: " + hospital.attr("DIRECCION")
+                            + "</h1 > ");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

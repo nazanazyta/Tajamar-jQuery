@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>jQuery 9</title>
+</head>
+<body>
+    <h1>Búsqueda empleados JavaScript Select</h1>
+    <form>
+        <label>Seleccione un empleado: </label>
+        <select id="selectempleados" onchange="realizarPeticion()">
+            <option value="value"></option>
+        </select>
+        <h1 style="color: blue" id="datooficio"></h1>
+    </form>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        //AL CARGAR LA PÁGINA NECESITAMOS QUE LOS EMPLEADOS
+        //YA ESTÉN CARGADOS EN EL <select>
+        window.onload = function () {
+            var xhttp = new XMLHttpRequest();
+            xhttp.addEventListener("load", function () {
+                //AQUÍ EL CÓDIGO CUANDO TENGAMOS RESPUESTA SERVIDOR
+                //AQUÍ CARGAMOS EL CONTROL <select>
+                if (this.readyState == 4 && this.status == 200) {
+                    //BUSCAMOS EL SELECT DONDE VAMOS A AÑADIR DATOS
+                    var select = document.getElementById("selectempleados");
+                    var nodosapellido = this.responseXML.getElementsByTagName("APELLIDO");
+                    for (var nodoape of nodosapellido) {
+                        var apellido = nodoape.textContent;
+                        var option = document.createElement("option");
+                        option.innerText = apellido;
+                        option.value = apellido;
+                        select.appendChild(option);
+                    }
+                }
+            });
+            xhttp.open("get", "xml/datosempleados.xml");
+            xhttp.send();
+        }
+
+        function realizarPeticion() {
+            //console.log("Realizar petición");
+            var xhttp = new XMLHttpRequest();
+            xhttp.addEventListener("load", leerDatosEmpleados);
+            xhttp.open("get", "xml/datosempleados.xml");
+            xhttp.send();
+        }
+        function leerDatosEmpleados() {
+            if (this.readyState == 4 && this.status == 200) {
+                //console.log("LISTO");
+                //NECESITAMOS AVERIGUAR EL OPTION SELECCIONADO
+                var select = document.getElementById("selectempleados");
+                //NECESITAMOS LA POSICIÓN DEL ELEMENTO SELECCIONADO
+                var posicion = -1;
+                for (var i = 0; i < select.options.length; i++) {
+                    var opt = select.options[i+1];
+                    if (opt.selected) {
+                        //NECESITAMOS LA POSICIÓN DEL ELEMENTO
+                        posicion = i;
+                        break;
+                    }
+                }
+                //console.log(posicion);
+                //NOS CENTRAMOS EN EL DOCUMENTO XML
+                var docxml = this.responseXML;
+                var nodosempleado = docxml.getElementsByTagName("EMPLEADO");
+                var empleado = nodosempleado[posicion];
+                //TENDRÍAMOS ESTE ELEMENTO:
+                //<EMPLEADO>
+                //    <APELLIDO>SANCHEZ</APELLIDO>
+                //    <OFICIO>EMPLEADO</OFICIO>
+                //</EMPLEADO>
+                //CON childNodes[] ACCEDEMOS A LOS HIJOS
+                //var apellido = empleado.childNodes[1].textContent;
+                //var oficio = empleado.childNodes[3].textContent;
+                var apellido = empleado.getElementsByTagName("APELLIDO")[0].textContent;
+                var oficio = empleado.getElementsByTagName("OFICIO")[0].textContent;
+                document.getElementById("datooficio").innerText = apellido + ", " + oficio;
+            }
+        }
+    </script>
+</body>
+</html>

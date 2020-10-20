@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>jQuery 8</title>
+</head>
+<body>
+    <h1>Leer documento empleados.xml con formato</h1>
+    <button type="button" onclick="realizarPeticion()">Leer empleados.xml</button>
+    <div id="contenido"></div>
+    <script>
+        function realizarPeticion() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.addEventListener("load", mostrarDatos);
+            xhttp.open("get", "xml/empleados.xml");
+            xhttp.send();
+        }
+        function mostrarDatos() {
+            //TENEMOS DOS PROPIEDADES QUE NOS INDICAN SI UNA PETICIÓN
+            //HA SIDO CORRECTA
+            //RECORDAMOS QUE AQUÍ ENTRA UNA VEZ QUE HA FINALIZADO
+            //LA PETICIÓN. YA SEA PETICIÓN CORRECTA O INCORRECTA
+            //TENEMOS DOS PROPIEDADES EN EL OBJETO this:
+            //  this.readyState --> Indica si ha finalizado la lectura (4)
+            //  this.status --> Indica el código de la respuesta (404) 200
+            var contenido = document.getElementById("contenido");
+            if (this.readyState == 4 && this.status == 200) {
+                //EL OBJETO XMLRequest SE PUEDE MANEJAR CON
+                //LOS MÉTODOS DEL DOM DE HTML.
+                //DICHO OBJETO VIENE EN LA PROPIEDAD this.responseXML
+                var docxml = this.responseXML;
+                //VAMOS A BUSCAR UN CONJUNTO DE NODOS PARA
+                //AISLAR LOS APELLIDOS (CASE SENSITIVE)
+                var nodosapellido = docxml.getElementsByTagName("APELLIDO");
+                var html = "<ul>";
+                //NOS HA DEVUELTO UN CONJUNTO DE NODOS
+                for (var i = 0; i < nodosapellido.length; i++) {
+                    //CAPTUTAMOS CADA NODO APELLIDO INDIVIDUAL
+                    var nodo = nodosapellido[i];
+                    //<APELLIDO>JIMENEZ</APELLIDO>
+                    //TODO NODO PUEDE TENER A SU VEZ HIJOS
+                    //EXISTE UNA PROPIEDAD PARA ACCEDER DE FORMA
+                    //JERÁRQUICA A LOS HIJOS childNodes[0]
+                    //UNA VEZ QUE TENEMOS ALGÚN HIJO, PODEMOS MOSTRAR
+                    //SU VALOR O SEGUIR BAJANDO MÁS HIJOS:
+                    //  <APELLIDO>JIMENEZ</APELLIDO>
+                    //      nodo.childNodes[0].nodeValue
+                    //  <DATO>
+                    //      <APELLIDO>REY</APELLIDO>
+                    //      <OFICIO>ANALISTA</OFICIO>
+                    //  </DATO>
+                    //      nodo.childNodes[0].childNodes[0].nodeValue --> REY
+                    //      nodo.childNodes[1].childNodes[0].nodeValue --> ANALISTA
+                    //      .tagName --> NOMBRE DE LA ETIQUETA
+                    //      .textContent --> REY ANALISTA
+                    //EXISTE UNA PROPIEDAD MÁS CÓMODA CUANDO YA ESTAMOS
+                    //EN UN NODO QUE TIENE CONTENIDO SI EL NODO TIENE SUBELEMENTOS,
+                    //NOS DEVUELVE TAMBIÉN EL CONTENIDO DE LOS SUBELEMENTOS
+                    //  .textContent
+                    //html += "<li>" + nodo.childNodes[0].nodeValue + "</li>";
+                    html += "<li>" + nodo.textContent + "</li>";
+                }
+                html += "</ul>";
+                contenido.innerHTML = html;
+            } else {
+                contenido.innerHTML = "<h1 style='color: red'>La petición ha sido incorrecta: " + this.status + "</h1>";
+            }
+        }
+    </script>
+</body>
+</html>

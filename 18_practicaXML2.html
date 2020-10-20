@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Práctica 2</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin-top: 1%;
+            margin-left: 2%;
+        }
+        span {
+            color: #17a814;
+        }
+        div {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sacar ficha cliente</h1>
+    <form>
+        <label>Seleccione un cliente: </label>
+        <select id="selectclientes">
+            <option>Elegir cliente</option>
+        </select>
+    </form>
+    <div id="resultado"></div>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.get("xml/ClientesXML.xml", function (data) {
+                var clientes = $(data).find("CLIENTE");
+                clientes.each(function () {
+                    var id = $(this).attr("IDCLIENTE");
+                    //var nombre = $(this).find("NOMBRE").text();   //coge el primero por defecto
+                    var nombre = $(this).find("NOMBRE").first().text(); //coge el primero de muchos
+                    var opt = $("<option>", {
+                        "text": nombre
+                        , "value": id
+                    });
+                    //var opt = $("<option>");
+                    //opt.text(nombre);
+                    //opt.val(id);
+                    $("#selectclientes").append(opt);
+                });
+                $("#selectclientes").change(function () {
+                    var id = $(this).val();
+                    //console.log(id);
+                    var cliente = $(data).find("CLIENTE[IDCLIENTE=" + id + "]");
+                    var nombre = cliente.find("NOMBRE").text();
+                    var direccion = cliente.find("DIRECCION").text();
+                    var email = cliente.find("EMAIL").text();
+                    var codigo = cliente.find("CODIGOPOSTAL").text();
+                    var web = cliente.find("PAGINAWEB").text();
+                    var imagen = cliente.find("IMAGENCLIENTE").text();
+                    //console.log(nombre);
+                    //console.log(direccion);
+                    //console.log(email);
+                    //console.log(codigo);
+                    //console.log(web);
+                    //console.log(imagen);
+                    var html = "<p><u>Nombre:</u> <span>" + nombre + "</span></p>";
+                    html += "<p><u>Dirección:</u> <span>" + direccion + "</span></p>";
+                    html += "<p><u>Email:</u> <span>" + email + "</span></p>";
+                    html += "<p><u>Código postal:</u> <span>" + codigo + "</span></p>";
+                    html += "<p><u>Página web:</u> <a href='" + web + "'>" + web + "</span></p>";
+                    html += "<img src='" + imagen + "' class='img-thumbnail'/>";
+                    $("#resultado").html(html);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

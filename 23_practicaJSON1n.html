@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Práctica 1</title>
+</head>
+<body>
+    <h1>Sacar ficha jugador</h1>
+    <form>
+        <label>Seleccione un jugador: </label>
+        <select id="selectjugadores">
+            <option>Elegir jugador</option>
+        </select>
+    </form>
+    <div id="resultado"></div>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "json/jugadores.json"
+                , method: "get"
+                , success: function (data) {
+                    $.each(data.jugadores, function (index, jugador) {
+                        //console.log(jugador.nombre);
+                        var opcion = $("<option>", {
+                            text: jugador.nombre
+                            , value: index
+                        });
+                        $("#selectjugadores").append(opcion);
+                    });
+                }
+                , error: function () {
+                    $("#resultado").text("Error al leer");
+                }
+            });
+            $("#selectjugadores").change(function () {
+                $("#resultado").text("");
+                var index = $(this).prop("selectedIndex");
+                $.ajax({
+                    url: "json/jugadores.json"
+                    , method: "get"
+                    , success: function (data) {
+                        
+                         var jugador = data.jugadores[index-1];
+                        $("#resultado").append($("<h1>", { html: "<u>Nombre</u>: " + jugador.nombre }))
+                            .append($("<h2>", { html: "<u>Posición</u>: " + jugador.posicion }))
+                            .append($("<h2>", { html: "<u>Edad</u>: " + jugador.edad }))
+                            .append($("<img>", { "src": jugador.imagen }));
+                    }
+                    , error: function () {
+                        $("#resultado").text("Error al leer");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

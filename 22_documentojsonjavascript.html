@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>jQuery 16</title>
+</head>
+<body>
+    <h1>Documento JSON con XMLHttpRequest</h1>
+    <button type="button" onclick="realizarPeticion()">Leer clientes JavaScript</button>
+    <div id="resultado"></div>
+    <script type="text/javascript">
+        function realizarPeticion() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.readyState);
+                    //AQUÍ CAPTURAREMOS LA RESPUESTA Y CONVERTIREMOS
+                    //EL OBJETO DE TEXTO PLANO A JSON
+                    var textoplano = this.responseText;
+                    //CONVERTIMOS EL TEXTO PLANO A FORMATO JSON
+                    //PARA TRATARLO
+                    var data = JSON.parse(textoplano);
+                    leerDatosJson(data);
+                }
+            }
+            //LO QUE INDICA true ES QUE DESEAMOS LA PETICIÓN ASÍNCRONA
+            xhr.open("get", "json/clientessimples.json", true);
+            xhr.send();
+        }
+
+        function leerDatosJson(data) {
+            //LOS OBJETOS JSON VIENEN DE JAVASCRIPT Y SE
+            //MANEJAN IGUAL QUE EN JQUERY
+            for (var i = 0; i < data.clientes.length; i++) {
+                var h3 = document.createElement("h3");
+                //CAPTURAMOS CADA CLIENTE
+                var cliente = data.clientes[i];
+                h3.innerText = cliente.nombre;
+                document.getElementById("resultado").appendChild(h3);
+            }
+            //for (var cliente of data.clientes) {
+            //    var h3 = document.createElement("h3");
+            //    h3.innerText = cliente.nombre;
+            //    document.getElementById("resultado").appendChild(h3);
+            //}
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Práctica 4</title>
+    <style>
+        img {
+            width: 200px;
+            height: 120px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Posición de elementos dinámicos (dos contenedores y SIN data-key)</h1>
+    <form>
+        <input type="range" id="rango" min="1" max="10" />
+        <span id="valorRango"></span>
+    </form>
+    <div id="cajabotones"></div>
+    <br />
+    <div id="cajaimagenes"></div>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#rango").change(function () {
+                $("#cajabotones").empty();
+                $("#cajaimagenes").empty();
+                var rango = $(this).val();
+                $("#valorRango").text(rango);
+                for (var i = 0; i < rango; i++) {
+                    var boton = $("<button>", {
+                        "type": "button"
+                        , "text": "Imagen " + (i + 1)
+                        , "value": i
+                    });
+                    boton.click(function () {
+                        var posicion = $(this).val();
+                        $("#cajaimagenes").children().eq(posicion).attr("src", "img/galgo2.jpg");
+                        console.log($(this).text());
+                    });
+                    $("#cajabotones").append(boton);
+                    var img = $("<img>", {
+                        "src": "img/galgo1.jpg"
+                    });
+                    $("#cajaimagenes").append(img);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

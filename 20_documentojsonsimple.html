@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>jQuery 14</title>
+</head>
+<body>
+    <h1>Leer documento tareas.json simple</h1>
+    <button type="button" id="botonget">Leer con getJson</button>
+    <button type="button" id="botonajax">Leer con ajax</button>
+    <div id="contenido"></div>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#botonget").click(function () {
+                $("#contenido").text("");
+                $.getJSON("json/tareas.json", function (data) {
+                    var ul = $("<ul>");
+                    $.each(data, function (key, value) {
+                        var li = $("<li>");
+                        li.html("<b>" + key + ":</b> <i>" + value + "</i>");
+                        console.log(li.text());
+                        ul.append(li);
+                    });
+                    //$("#contenido").append(ul);
+                    ul.appendTo($("#contenido"));
+                });
+            });
+            $("#botonajax").click(function () {
+                $("#contenido").text("");
+                $.ajax({
+                    "url": "json/tareas.json"
+                    , "method": "get"
+                    //, "dataType": application/json
+                    , "success": function (data) {
+                        var ul = $("<ul>");
+                        $.each(data, function (key, value) {
+                            var li = $("<li>");
+                            li.html(key + ": " + value);
+                            console.log(li.text());
+                            ul.append(li);
+                        });
+                        $("#contenido").append(ul);
+                    }
+                    , "error": function () {
+                        $("#contenido").text("Error al leer");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
