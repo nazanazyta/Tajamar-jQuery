@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <h1>Acceso Servicios Api Departamentos</h1>
+    <form>
+        <label>Número: </label>
+        <input type="number" id="cajanumero" />
+        <label>Nombre: </label>
+        <input type="text" id="cajanombre" />
+        <label>Localidad: </label>
+        <input type="text" id="cajalocalidad" />
+        <button type="button" id="botoninsertar">Insertar</button>
+        <button type="button" id="botonmodificar">Modificar</button>
+        <button type="button" id="botoneliminar">Eliminar</button>
+    </form>
+    <hr />
+    <h2 id="mensaje" style="color: fuchsia"></h2>
+    <table border="1" id="tabla">
+        <thead>
+            <tr>
+                <th>NÚMERO</th>
+                <th>NOMBRE</th>
+                <th>LOCALIDAD</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        var urlapi = "https://apicruddepartamentoscore.azurewebsites.net";
+        $(document).ready(function () {
+            cargarDepartamentos();
+            $("#botoninsertar").click(function () {
+                var numero = parseInt($("#cajanumero").val());
+                var nombre = $("#cajanombre").val();
+                var localidad = $("#cajalocalidad").val();
+                var request = "/api/departamentos";
+                //NECESITAMOS UN OBJETO DEPARTAMENTO CONVERTIDO A FORMATO JSON
+                //PARA CREAR OBJETOS EN JS SE UTILIZA LA INSTRUCCIÓN new Object()
+                //SUS PROPIEDADES SON DINÁMICAS, NOS LAS INVENTAMOS
+                var dept = new Object();
+                dept.numero = numero;
+                dept.nombre = nombre;
+                dept.localidad = localidad;
+                //TRANSFORMAMOS EL OBJETO A JSON MEDIANTE JSON.stringify
+                var json = JSON.stringify(dept);
+                //console.log(json);
+                $.ajax({
+                    url: urlapi + request
+                    , type: "POST"
+                    , data: json
+                    , contentType: "application/json"
+                    , success: function (data) {
+                        $("#mensaje").text("Departamento insertado");
+                        cargarDepartamentos();
+                    }
+                });
+            });
+            $("#botonmodificar").click(function () {
+                var numero = parseInt($("#cajanumero").val());
+                var nombre = $("#cajanombre").val();
+                var localidad = $("#cajalocalidad").val();
+                var request = "/api/departamentos";
+                var dept = new Object();
+                dept.numero = numero;
+                dept.nombre = nombre;
+                dept.localidad = localidad;
+                var json = JSON.stringify(dept);
+                $.ajax({
+                    url: urlapi + request
+                    , type: "PUT"
+                    , data: json
+                    , contentType: "application/json"
+                    , success: function (data) {
+                        $("#mensaje").text("Departamento modificado");
+                        cargarDepartamentos();
+                    }
+                });
+            });
+            $("#botoneliminar").click(function () {
+                var numero = $("#cajanumero").val();
+                var request = "/api/departamentos/" + numero;
+                $.ajax({
+                    url: urlapi + request
+                    , type: "delete"
+                    , success: function () {
+                        $("#mensaje").text("Departamento eliminado: " + numero);
+                        cargarDepartamentos();
+                    }
+                    , error: function () {
+
+                    }
+                });
+            });
+        });
+        //VOY A SEPARAR LA LECTURA DE LOS DEPARTAMENTOS EN UNA FUNCIÓN
+        //DECLARATIVA PORQUE LA LLAMAREMOS AL CARGAR LA PÁGINA
+        //Y AL REALIZAR LAS CONSULTAS DE ACCIÓN TAMBIÉN
+        function cargarDepartamentos() {
+            var request = "/api/departamentos";
+            $.getJSON(urlapi + request, function (data) {
+                var html = "";
+                $.each(data, function (index, dept) {
+                    html += "<tr>";
+                    html += "<td>" + dept.numero + "</td>";
+                    html += "<td>" + dept.nombre + "</td>";
+                    html += "<td>" + dept.localidad + "</td>";
+                    html += "</tr>";
+                });
+                $("#tabla tbody").html(html);
+            });
+        }
+    </script>
+</body>
+</html>
