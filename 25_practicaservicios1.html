@@ -3,72 +3,88 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <style>
+        #tablaemp {
+            visibility: hidden;
+        }
+    </style>
 </head>
 <body>
-    <h1>Acceso Servicios Api Departamentos y Api Empleados</h1>
+    <h1>Maestro detalle Servicios Api jQuery</h1>
     <table border="1" id="tabladep">
         <thead>
             <tr>
-                <td>NUMERO</td>
-                <td>NOMBRE</td>
-                <td>LOCALIDAD</td>
+                <th>Número</th>
+                <th>Nombre</th>
+                <th>Localidad</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <hr />
+    <table border="1" id="tablaemp">
+        <thead>
+            <tr>
+                <th>IdEmpleado</th>
+                <th>Apellido</th>
+                <th>Oficio</th>
+                <th>Salario</th>
+                <th>Departamento</th>
             </tr>
         </thead>
         <tbody></tbody>
     </table>
     <script src="js/jquery-3.5.1.min.js"></script>
     <script>
-        var urldep = "https://apicruddepartamentoscore.azurewebsites.net/";
-        var urlemp = "https://apiempleadosspgs.azurewebsites.net/";
         $(document).ready(function () {
+            var urldep = "https://apicruddepartamentoscore.azurewebsites.net/";
             var reqgetdep = "/api/departamentos";
-            $.getJSON(urldep + reqgetdep, function (data) {
-                $.each(data, function (index, dept) {
-                    var tr = $("<tr>");
-                    var tdnum = $("<td>", {
-                        text: dept.numero
-                    });
-                    var tdnom = $("<td>");
-                    var boton = $("<button>", {
-                        type: "button"
-                        , id: dept.numero
-                        , text: dept.nombre
-                    });
-                    boton.click(function () {
-                        var num = $(this).attr("id");
-                        var reqgetemp = "api/Empleados/EmpleadosDepartamento/" + num;
-                        $.getJSON(urlemp + reqgetemp, function () {
-                            var html = "<table border='1' id='tablaemp'>"
-                                + "<thead><tr><td>IdEmpleado</td><td>Apellido</td>"
-                                + "<td>Oficio</td><td>Salario</td></thead><tbody></tbody></table>";
-                            $(document).html(html);
-                            $.each(data, function (index, emp) {
-                                console.log(emp.idempleado);
-                                //var tr = $("<tr>");
-                                //var tdid = $("<td>", {
-                                //    text: emp.idEmpleado
-                                //});
-                                //var tdape = $("<td>", {
-                                //    text: emp.apellido
-                                //});
-                                //var tdofi = $("<td>", {
-                                //    text: emp.oficio
-                                //});
-                                //var tdsal = $("<td>", {
-                                //    text: emp.salario
-                                //});
-                                //tr.append(tdid).append(tdape).append(tdofi).append(tdsal);
-                                //$("#tablaemp tbody").append(tr);
+            $.ajax({
+                url: urldep + reqgetdep
+                , type: "get"
+                , success: function (data) {
+                    $.each(data, function (index, dept) {
+                        var tr = $("<tr>");
+                        var tdnum = $("<td>", { text: dept.numero });
+                        var tdnom = $("<td>", { text: dept.nombre });
+                        var tdloc = $("<td>", { text: dept.localidad });
+                        tr.append(tdnum).append(tdnom).append(tdloc);
+                        $("#tabladep tbody").append(tr);
+                        var link = $("<a>", {
+                            href: "#"
+                            , "data-iddep": dept.numero
+                            , text: "Empleados"
+                        });
+                        tr.append($("<td>").append(link));
+                        link.click(function () {
+                            var iddep = $(this).data("iddep");
+                            //console.log(iddep);
+                            var urlemp = "https://apiempleadosspgs.azurewebsites.net/";
+                            var reqgetemp = "api/Empleados/EmpleadosDepartamento/" + iddep;
+                            $.ajax({
+                                url: urlemp + reqgetemp
+                                , type: "get"
+                                , success: function (data) {
+                                    //COMO NO VAMOS A REALIZAR ACCIONES SOBRE LOS OBJETOS
+                                    //DINÁMICOS, HACEMOS EL DIBUJO CON String
+                                    var html = "";
+                                    $.each(data, function (index, emp) {
+                                        html += "<tr>";
+                                        html += "<td>" + emp.idEmpleado + "</td>"
+                                            + "<td>" + emp.apellido + "</td>"
+                                            + "<td>" + emp.oficio + "</td>"
+                                            + "<td>" + emp.salario + "</td>"
+                                            + "<td>" + emp.departamento + "</td>";
+                                        html += "</tr>";
+                                        $("#tablaemp tbody").html(html);
+                                    });
+                                    $("#tablaemp").css("visibility", "visible");
+                                }
                             });
                         });
                     });
-                    tdnom.append(boton);
-                    var tdloc = $("<td>", {
-                        text: dept.localidad
-                    });
-                    tr.append(tdnum).append(tdnom).append(tdloc);
-                    $("#tabladep tbody").append(tr);
-                });
+                }
             });
         });
     </script>

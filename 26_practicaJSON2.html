@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Práctica 2</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <h1>Acceso Servicios Api Hospitales</h1>
+    <form>
+        <label>IdHospital: </label>
+        <input type="number" id="cajaid" />
+        <label>Nombre: </label>
+        <input type="text" id="cajanombre" />
+        <label>Dirección: </label>
+        <input type="text" id="cajadire" />
+        <label>Teléfono: </label>
+        <input type="text" id="cajatel" />
+        <label>Camas: </label>
+        <input type="number" id="cajacamas" />
+        <button type="button" id="botoninsertar">Insertar</button>
+        <button type="button" id="botonmodificar">Modificar</button>
+    </form>
+    <hr />
+    <h2 id="mensaje" style="color: fuchsia"></h2>
+    <table border="1" id="tabla" class="table table-sm">
+        <thead class="thead-dark">
+            <tr>
+                <th>IdHospital</th>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Camas</th>
+                <th>MODIFICAR</th>
+                <th>ELIMINAR</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        var urlapi = "https://apicrudhospital.azurewebsites.net";
+        $(document).ready(function () {
+            cargarHospitales();
+            $("#botoninsertar").click(function () {
+                var id = parseInt($("#cajaid").val());
+                var nombre = $("#cajanombre").val();
+                var direccion = $("#cajadire").val();
+                var telefono = parseInt($("#cajatel").val());
+                var camas = parseInt($("#cajacamas").val());
+                var request = "/webresources/hospitales/post";
+                var hosp = new Object();
+                hosp.idhospital = id;
+                hosp.nombre = nombre;
+                hosp.direccion = direccion;
+                hosp.telefono = telefono;
+                hosp.camas = camas;
+                var json = JSON.stringify(hosp);
+                $.ajax({
+                    url: urlapi + request
+                    , type: "POST"
+                    , data: json
+                    , contentType: "application/json"
+                    , success: function (data) {
+                        $("#mensaje").text("Hospital insertado");
+                        $("#tabla tbody").html("");
+                        cargarHospitales();
+                    }
+                });
+            });
+            $("#botonmodificar").click(function () {
+                var id = parseInt($("#cajaid").val());
+                var nombre = $("#cajanombre").val();
+                var direccion = $("#cajadire").val();
+                var telefono = parseInt($("#cajatel").val());
+                var camas = parseInt($("#cajacamas").val());
+                var request = "/webresources/hospitales/put";
+                var hosp = new Object();
+                hosp.idhospital = id;
+                hosp.nombre = nombre;
+                hosp.direccion = direccion;
+                hosp.telefono = telefono;
+                hosp.camas = camas;
+                var json = JSON.stringify(hosp);
+                $.ajax({
+                    url: urlapi + request
+                    , type: "PUT"
+                    , data: json
+                    , contentType: "application/json"
+                    , success: function (data) {
+                        $("#mensaje").text("Hospital modificado");
+                        $("#tabla tbody").html("");
+                        cargarHospitales();
+                    }
+                });
+            });
+        });
+        function cargarHospitales() {
+            var request = "/webresources/hospitales";
+            $.getJSON(urlapi + request, function (data) {
+                $.each(data, function (index, hosp) {
+                    var tr = $("<tr>");
+                    var tdid = $("<td>", { text: hosp.idhospital });
+                    var tdnom = $("<td>", { text: hosp.nombre });
+                    var tddir = $("<td>", { text: hosp.direccion });
+                    var tdtel = $("<td>", { text: hosp.telefono });
+                    var tdcam = $("<td>", { text: hosp.camas });
+                    var tdmod = $("<td align='center'>");
+                    var butmod = $("<button>", {
+                        type: "button"
+                        , id: "modificar"
+                        , "data-id": hosp.idhospital
+                        , text: "Modificar"
+                    });
+                    butmod.click(function () {
+                        var id = $(this).data("id");
+                        $("#cajaid").val(id);
+                        $("#cajanombre").focus();
+                    });
+                    tdmod.append(butmod);
+                    var tdeli = $("<td align='center'>");
+                    var buteli = $("<button>", {
+                        type: "button"
+                        , id: "eliminar"
+                        , "data-id": hosp.idhospital
+                        , text: "Eliminar"
+                    });
+                    buteli.click(function () {
+                        var id = $(this).data("id");
+                        var request = "/webresources/hospitales/delete/" + id;
+                        var respuesta = confirm("Seguro que quiere eliminarlo??");
+                        if (respuesta) {
+                            $.ajax({
+                                url: urlapi + request
+                                , type: "delete"
+                                , success: function () {
+                                    $("#mensaje").text("Hospital eliminado: " + id);
+                                    $("#tabla tbody").html("");
+                                    cargarHospitales();
+                                }
+                            });
+                        }
+                    });
+                    tdeli.append(buteli);
+                    tr.append(tdid).append(tdnom).append(tddir).append(tdtel).append(tdcam).append(tdmod).append(tdeli);
+                    $("#tabla tbody").append(tr);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
