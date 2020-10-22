@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <h1>Expresiones regulares</h1>
+    <label>Código postal: </label>
+    <input type="text" id="cajacodigo" />
+    <button type="button" id="botoncodigo">Validar CP</button>
+    <br />
+    <label>NIF: </label>
+    <input type="text" id="cajanif" pattern="\d{8}[A-Z]"/>
+    <button type="button" id="botonnif">Validar NIF</button>
+    <h1 id="respuesta"></h1>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#botoncodigo").click(function () {
+                //OBJETO
+                var exp = new RegExp("^\\d{5}$");
+                //Al tener las comillas necesitamos
+                //otra \ para leer el \d 
+                //var exp = new RegExp("^[0-9]{5}$");
+                var codigo = $("#cajacodigo").val();
+                var respuesta = exp.test(codigo);
+                $("#respuesta").text(respuesta.toString().toUpperCase());
+            });
+            $("#botonnif").click(function () {
+                //LITERAL
+                var exp = /^\d{8}[A-Z]{1}$/;
+                //var exp = /^[0-9]{8}[A-Z]{1}$/;
+                var nif = $("#cajanif").val();
+                var respuesta = exp.test(nif);
+                $("#respuesta").text(respuesta.toString().toUpperCase());
+            });
+        });
+    </script>
+</body>
+</html>
