@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <h1>Ejemplo Herecia y Extends</h1>
+    <button type="button" id="botonherencia">Probar Herencia</button>
+    <button type="button" id="botonextends">Probar Extends</button>
+    <div id="resultado"></div>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script src="js/30_herenciaextends.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#botonherencia").click(function () {
+                var array = new MiArray();
+                if (MiArray.prototype.isPrototypeOf(Array)) {
+                    console.log("ES");
+                } else {
+                    console.log("NO ES");
+                }
+                array.push(88);
+                array.push(14);
+                array.push(22);
+                array.push(5);
+                var html = "<h3>Descripción: " + array.descripcion + "</h3>";
+                html += "<h3>Longitud: " + array.longitud + "</h3>";
+                html += "<h3 style='color: blue'>Elementos: " + array.contarElementos() + "</h3>";
+                html += "<h3 style='color: red'>Elementos: " + array.sumarElementos() + "</h3>";
+                $("#resultado").html(html);
+            });
+            $("#botonextends").click(function () {
+                //UTILIZAMOS EL OBJETO NATIVO Array DE js
+                //PERO CON LAS NUEVAS FUNCIONALIDADES
+                var array = new Array();
+                array.push(44);
+                array.push(77);
+                array.push(88);
+                var html = "<h2 style='color: green'>Elementos: " + array.contarElementos() + "</h2>";
+                html += "<h2 style='color: yellow'>Suma: " + array.sumarElementos() + "</h2>";
+                $("#resultado").html(html);
+            });
+        });
+    </script>
+</body>
+</html>

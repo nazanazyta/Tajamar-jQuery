@@ -13,6 +13,7 @@
             var xhttp = new XMLHttpRequest();
             xhttp.addEventListener("load", function () {
                 if (this.readyState == 4 && this.status == 200) {
+                    //XML
                     var docxml = this.responseXML;
                     var nodoalumnos = docxml.getElementsByTagName("alumno");
                     var ul = document.createElement("ul");
@@ -30,9 +31,22 @@
                         link.addEventListener("click", mostrarDatos);
                     }
                     document.getElementById("lista").appendChild(ul);
+                    //JSON
+                    //var docjson = JSON.parse(this.responseText);
+                    //console.log(docjson);
+                    //for (var jugador of docjson.jugadores) {
+                    //    console.log(jugador.nombre);
+                    //}
+                    //var docjson = JSON.parse(this.responseText);
+                    //console.log(docjson);
+                    //for (var jugador of docjson) {
+                    //    console.log(jugador.nombre);
+                    //}
                 }
             });
             xhttp.open("get", "xml/alumnos.xml");
+            //xhttp.open("get", "json/jugadores.json");
+            //xhttp.open("get", "json/jugadoresNAZA.json");
             xhttp.send();
         }
         function mostrarDatos() {
